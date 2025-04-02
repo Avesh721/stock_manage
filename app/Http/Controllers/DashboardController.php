@@ -19,6 +19,8 @@ class DashboardController extends Controller
 
 public function product_d(Request $request)
 {
+
+   // return "hello";
     $user = Auth::user();
 
     if (isset($user)) {

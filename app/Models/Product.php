@@ -32,4 +32,16 @@ class Product extends Model
             ->where('id', '<', optional($this->lastMovement)->id)
             ->latestOfMany();
     }
+    public function stock_data(){
+
+
+            return $this->hasMany(StockMovement::class,'product_id','id');
+
+
+    }
+public function name(){
+
+    return $this->hasone(user::class,'name','name');
+}
+
 }

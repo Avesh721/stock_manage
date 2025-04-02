@@ -8,6 +8,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Product;
+
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class ProfileController extends Controller
 {
@@ -57,4 +61,18 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+
+
+    public function pdf($id) // Accepting $id directly
+    {
+
+           // return $id;
+            $products = Product::all();
+            $pdf = Pdf::loadView('pdff', compact('products'));
+
+            return $pdf->stream('stock_report.pdff');
+        }
+
+
 }

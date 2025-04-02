@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Session;
 use App\Models\Product;
 use App\Models\StockMovement;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
+
 
 
 
@@ -296,7 +299,91 @@ if($check){
         return response()->json(['data' => $data]);
     }
 
+    public  function test(request $request){
 
+
+        // $data = DB::table('products')->leftJoin
+        // ('stock_movements','products.id','=','stock_movements.product_id')->where('products.id','=',15)->get();
+
+    //    $data=Product::with(['name'=>function($query){
+
+    //     $query->where('name','lastone');
+
+    //    }])->get();
+
+
+// $data=DB::table('products')->leftJoin('stock_movements','products.id','=','stock_movements.product_id')->where('stock_movements.stock_quantity','<',5)->where('products.name','=','last')->get();
+
+
+// $data = DB::table('products')
+//     ->leftJoin('stock_movements', 'products.id', '=', 'stock_movements.product_id')
+//     ->where([
+//         ['stock_movements.stock_quantity', '<', 5],
+//         ['products.name', '=', 'last']
+//     ])
+//     ->get();
+
+
+
+
+    $data=DB::table('products')->leftJoin('stock_movements','products.id','=','stock_movements.product_id')
+    ->where([
+        ['stock_movements.stock_quantity','<',5],
+
+    ['products.name','=','last']
+    ])
+    ->get();
+
+
+        return $data;
+
+
+    }
+
+    public function verifyPayment(Request $request)
+{
+        DB::beginTransaction();
+
+        try {
+            // Step 1: Deduct from Payer
+            $payer = User::findOrFail($payerId);
+            if ($payer->balance < $amount) {
+                throw new \Exception("Insufficient funds.");
+            }
+            $payer->balance -= $amount;
+            $payer->save();
+
+            // Step 2: Credit to Payee
+            $payee = User::findOrFail($payeeId);
+            $payee->balance += $amount;
+            $payee->save();
+
+            // Step 3: Log the transaction
+            Transaction::create([
+                'payer_id' => $payerId,
+                'payee_id' => $payeeId,
+                'amount' => $amount,
+                'status' => 'success'
+            ]);
+
+            // Commit transaction if all steps succeed
+            DB::commit();
+            return response()->json(['message' => 'Payment successful'], 200);
+
+        } catch (\Exception $e) {
+            // Rollback on failure
+            DB::rollback();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+
+    }
+
+     public function test1(){
+
+        //return "hello";
+
+        return view('pdf_data');
+     }
 
 
 }

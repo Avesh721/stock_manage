@@ -80,7 +80,17 @@
                                         onclick="viewHistory({{ $product->id }})">
                                         📜 History
                                     </button>
-                                </td>
+
+                                    <!-- Open PDF Button (Now inside the product row) -->
+                                    <button
+                                        class="px-3 py-2 ml-2 text-sm text-indigo-600 border border-gray-300 hover:text-indigo-800"
+                                        onclick="openPdf({{ $product->id }})">
+                                        📄 Open PDF
+                                    </button>
+                                    <button onclick="window.location.href='{{ route('test1') }}'"
+                                        class="px-3 py-2 ml-2 text-sm text-indigo-600 border border-gray-300 hover:text-indigo-800">
+                                        📄 Pdf Data
+                                    </button>
 
                             </tr>
                         @endforeach
@@ -155,11 +165,17 @@
                 <input type="hidden" id="product_id" name="product_id">
 
                 <div class="mb-4">
-                    <label class="block font-medium">Product Name:</label>
+                    <label class="block font-medium">Product Nameee:</label>
                     <input type="text" class="w-full p-2 border rounded" name="pro_name" id="pro_name">
                 </div>
 
                 <div id="pro_name_error" class="field_error"></div>
+
+
+                <div class="mb-4">
+                    <label class="block font-medium">test Name:</label>
+                    <input type="text" class="w-full p-2 border rounded" name="pro_name" id="pro_name">
+                </div>
 
 
                 <div class="mb-4">
@@ -185,15 +201,31 @@
                 <div id="edit_price_error" class="field_error"></div>
 
 
+
                 <button class="px-4 py-2 mt-3 text-white bg-black rounded-md shadow hover:bg-gray-900">
                     Update
                 </button>
             </form>
+
+
         </div>
     </div>
 
+
+
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script>
+        function openPdf(id) {
+
+            console.log(id);
+
+            let pdfWindow = window.open("", "_blank", "width=800,height=600,scrollbars=yes,resizable=yes");
+            pdfWindow.location.href = "{{ url('/pdf') }}/" + id; // Append the ID to the URL
+
+        }
+    </script>
 
     <script>
         function showAddModal() {

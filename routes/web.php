@@ -42,6 +42,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/pdf/{id}', [ProfileController::class, 'pdf'])->name('pdf');
+
+    Route::get('/test1',[ProductController::class,'test1'])->name('test1');
+
+
 });
+
+Route::get('/test',[ProductController::class,'test']);
 
 require __DIR__.'/auth.php';
